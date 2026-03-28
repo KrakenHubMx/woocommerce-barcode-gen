@@ -14,10 +14,10 @@
 
 defined('ABSPATH') || exit;
 
-define('KH_BCG_VERSION', '0.0.2');
+define('KH_BCG_VERSION', '0.0.1');
 define('KH_PATH', plugin_dir_path(__FILE__));
-
-require_once KH_PATH . '/inc/updater.class.php';
+require 'updater/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 
 
@@ -35,6 +35,16 @@ add_action('admin_enqueue_scripts', 'kh_enqueue_admin_files');
 function activate()
 {
     //Activation code in here
+    $myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://github.com/KrakenHubMx/woocommerce-barcode-gen',
+	__FILE__,
+	'woocommerce-barcode-gen'
+);
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
+
+//Optional: If you're using a private repository, specify the access token like this:
+//$myUpdateChecker->setAuthentication('your-token-here');
 
 }
 
@@ -79,4 +89,3 @@ function kh_enqueue_admin_files($hook)
     wp_enqueue_script('kh_js_script', plugin_dir_url(__FILE__) . '/kh-functions.js', array(), KH_BCG_VERSION);
 }
 
-new KrakenHub\Barcode\Updater();

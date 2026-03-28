@@ -14,7 +14,7 @@
 
 defined('ABSPATH') || exit;
 
-define('KH_BCG_VERSION', '0.0.1');
+define('KH_BCG_VERSION', '0.0.3');
 define('KH_PATH', plugin_dir_path(__FILE__));
 require 'updater/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;

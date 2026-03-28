@@ -1,59 +1,83 @@
+/**
+ * Simple Barcode Generator - Frontend Functions
+ * @author: Joseph García
+ * @version: 0.0.4
+ */
+
 console.log('KH JS Functions loaded');
 
 function printBarcode(i) {
-    let options = {
-        'barcodeValue': i.getAttribute("data-barcode-value"),
-        'itemName': i.getAttribute("data-item-name"),
-        'itemPrice': i.getAttribute("data-item-price")
-    }
-    
-    var win = window.open('about:blank', "_new");
-    win.document.open();
-    barcodeMarkup = `<!DOCTYPE html>
-    <html lang="en">
+    const options = {
+        barcodeValue: i.getAttribute("data-barcode-value") || '',
+        itemName: i.getAttribute("data-item-name") || '',
+        itemPrice: i.getAttribute("data-item-price") || ''
+    };
+    const win = window.open('', "_blank");
+    const barcodeMarkup = `
+    <!DOCTYPE html>
+    <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>KH Barcode Generator: Print View</title>
+        <title>Imprimir Etiqueta - ${options.barcodeValue}</title>
         <style>
-            @media print screen{
-                body{
-                    font-family: sans-serif;
-                    font-size:10px;
-                    color:black;
-                    margin:0px;
-                    width:100%;
-                }
-                p{
-                    margin: 3px auto;
-                }
-                img{
-                    width:100%;
-                    heigth:auto;
-                    margin:0px;
-                }
+            /* Estilos generales y para pantalla */
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                margin: 0;
+                padding: 10px;
+                color: black;
+                text-align: center;
             }
-            p{
-                margin: 5px auto;
-                font-family: sans-serif;
-                font-size:12px;
-                color:black;
-                
+            .label-wrapper {
+                width: 100%;
+                max-width: 250px; /* Ajustable según el ancho del papel térmico */
+                margin: 0 auto;
+            }
+            p {
+                margin: 4px 0;
+                font-size: 13px;
+                line-height: 1.2;
+            }
+            .sku-text {
+                font-weight: bold;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+            img {
+                width: 100%;
+                height: auto; /* Corregido el typo 'heigth' */
+                display: block;
+                margin: 8px 0;
+            }
+            
+            /* Ajustes específicos para la impresora */
+            @media print {
+                @page { 
+                    margin: 0; 
+                }
+                body { 
+                    margin: 0.2cm; 
+                }
+                /* Ocultar elementos innecesarios del navegador si existieran */
+                header, footer, .no-print {
+                    display: none !important;
+                }
             }
         </style>
     </head>
-    <body onload="window.print()" onafterprint="window.close()">
-        <div>
-            <center>
-                <p>{item_name} - {item_price}</p>
-                <img src="https://wp-barcode.tkh.re/api/generate?v={barcode_value}" alt="Generated Barcode">
-                <p>{barcode_value}</p>
-            </center>
+    <body onload="window.print(); window.close();">
+        <div class="label-wrapper">
+            <p>${options.itemName}</p>
+            <p><strong>${options.itemPrice}</strong></p>
+            
+            <img src="https://wp-barcode.tkh.re/api/generate?v=${options.barcodeValue}" alt="Barcode">
+            
+            <p class="sku-text">${options.barcodeValue}</p>
         </div>
     </body>
     </html>`;
 
-    win.document.write(barcodeMarkup.replaceAll('{item_price}',options.itemPrice).replaceAll('{item_name}',options.itemName).replaceAll('{barcode_value}',options.barcodeValue))
+    win.document.write(barcodeMarkup);
     win.document.close();
 }

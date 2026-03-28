@@ -10,16 +10,23 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
  */
-
-
 defined('ABSPATH') || exit;
 define('KH_BCG_VERSION', '0.0.4');
 define('KH_PATH', plugin_dir_path(__FILE__));
+if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+
+    add_action( 'admin_notices', function() {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><strong>Simple Barcode Generator</strong> requiere que <strong>WooCommerce</strong> esté instalado y activo para funcionar.</p>
+        </div>
+        <?php
+    } );
+    return;
+}
+
 require KH_PATH . 'updater/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
-
-
-
 /**
  * Setting up Hooks
  */
@@ -34,7 +41,6 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
 	__FILE__,
 	'woocommerce-barcode-gen'
 );
-//Set the branch that contains the stable release.
 $myUpdateChecker->setBranch('main');
 /**
  * Activate callback

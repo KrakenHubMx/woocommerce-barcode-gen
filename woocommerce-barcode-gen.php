@@ -3,7 +3,7 @@
  * Plugin Name:       Simple Barcode Generator
  * Plugin URI:        https://krakenhub.net/
  * Description:       Create basic barcode to be printed taking the SKU field of woocommerce
- * Version:           0.0.4
+ * Version:           1.0.0
  * Author:            KRAKENHUB
  * Author URI:        https://krakenhub.net
  * License:           GPL v2 or later
@@ -11,7 +11,7 @@
 
  */
 defined('ABSPATH') || exit;
-define('KH_BCG_VERSION', '0.0.4');
+define('KH_BCG_VERSION', '1.0.0');
 define('KH_PATH', plugin_dir_path(__FILE__));
 if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 
@@ -49,6 +49,28 @@ $myUpdateChecker->setBranch('main');
 function activate()
 {
     //Activation code in here   
+}
+add_action( 'admin_init', 'kh_bcg_check_woocommerce_dependency' );
+
+function kh_bcg_check_woocommerce_dependency() {
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        if ( isset($_GET['activate']) && $_GET['activate'] == 'true' ) {
+            deactivate_plugins( plugin_basename( __FILE__ ) );
+            if ( isset( $_GET['activate'] ) ) {
+                unset( $_GET['activate'] );
+            }
+            add_action( 'admin_notices', 'kh_bcg_wc_missing_notice' );
+        }
+        add_action( 'admin_notices', 'kh_bcg_wc_missing_notice' );
+    }
+}
+
+function kh_bcg_wc_missing_notice() {
+    ?>
+    <div class="notice notice-error is-dismissible">
+        <p><?php _e( '<strong>Simple Barcode Generator</strong> no ha sido activado porque requiere que WooCommerce esté instalado y activo.', 'woocommerce' ); ?></p>
+    </div>
+    <?php
 }
 
 /**

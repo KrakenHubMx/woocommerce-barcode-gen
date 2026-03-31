@@ -1,7 +1,7 @@
 
 # Simple Barcode Generator
 
-[![WordPress Version](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
+[![WordPress Version](https://img.shields.io/badge/WordPress-5x.0%2B-blue.svg)](https://wordpress.org/)
 [![WooCommerce Required](https://img.shields.io/badge/WooCommerce-Required-red.svg)](https://woocommerce.com/)
 [![License](https://img.shields.io/badge/License-GPL%20v2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
